@@ -5,13 +5,10 @@ import avaliacao.backend.api.service.ClienteService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cliente")
@@ -20,25 +17,24 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
-    @GetMapping
-    public ResponseEntity<List<Cliente>> listarClientes() {
-        return new ResponseEntity<List<Cliente>>(clienteService.listarClientes(), HttpStatus.OK);
+    @PutMapping()
+    public ResponseEntity<Cliente> adicionarAtualizarCliente(@Valid @RequestBody Cliente cliente) {
+        return new ResponseEntity<>(clienteService.adicionarAtualizarCliente(cliente), HttpStatus.CREATED);
     }
-
 
     @GetMapping("/{cliente_id}")
     public ResponseEntity<Cliente> obterClientePorId(@PathVariable Long cliente_id) {
         return new ResponseEntity<>(clienteService.obterClientePorId(cliente_id), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<Cliente> adicionarAtualizarCliente(@Valid @RequestBody Cliente cliente) {
-        return new ResponseEntity<>(clienteService.adicionarAtualizarCliente(cliente), HttpStatus.CREATED);
+    @GetMapping("/listagem/{pagina}")
+    public ResponseEntity<Page<Cliente>> obterListagemClientes(@PathVariable Integer pagina) {
+        return new ResponseEntity<>(clienteService.obterListagemClientes(pagina), HttpStatus.OK);
     }
 
     @DeleteMapping("/{cliente_id}")
     public ResponseEntity<Void> removerCliente(@PathVariable Long cliente_id) {
         clienteService.removerCliente(cliente_id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

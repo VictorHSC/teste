@@ -1,4 +1,4 @@
-package avaliacao.backend.api.controller;
+package avaliacao.backend.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -27,5 +27,14 @@ public class ControllerAdvice {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return errors;
+    }
+
+    // CLIENTE NAO ENCONTRADO
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(ClienteNaoEncontadoException.class)
+    public Map<String, String> clienteNaoEncontadoException(ClienteNaoEncontadoException exception) {
+        Map<String, String> error = new HashMap<>();
+        error.put(ERROR, exception.getMessage());
+        return error;
     }
 }

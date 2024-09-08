@@ -1,39 +1,167 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Clientes</title>
     <link rel="stylesheet" href="/css/style.css"/>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            width: 100%;
+            max-width: 1200px;
+            margin: 1% auto;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+            margin: 10px 0;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            color: #fff;
+        }
+
+        .button:active {
+            background-color: #004080;
+            border-color: #004080;
+        }
+
+        .button:disabled {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: #fff;
+            cursor: not-allowed;
+        }
+
+        .table-container {
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table td.number {
+            text-align: right;
+        }
+
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .pagination a.disabled {
+            background-color: #e0e0e0;
+            color: #a0a0a0;
+            pointer-events: none;
+        }
+
+        .pagination a:hover {
+            background-color: #e2e6ea;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Lista de Clientes</h1>
+<h1>Gestão de Clientes</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Sobrenome</th>
-        <th>Email</th>
-        <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="cliente : ${clientes}">
-        <td th:text="${cliente.id}"></td>
-        <td th:text="${cliente.nome}"></td>
-        <td th:text="${cliente.sobrenome}"></td>
-        <td th:text="${cliente.email}"></td>
-        <td>
-            <a th:href="@{'/clientes/editar/' + ${cliente.id}}">Editar</a>
-            <a th:href="@{'/clientes/remover/' + ${cliente.id}}">Deletar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<a th:href="@{/clientes/novo}" class="button">Adicionar Cliente</a>
 
-<a th:href="@{/clientes/novo}">Adicionar Cliente</a>
+<div class="table-container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>WhatsApp</th>
+            <th>Data de Nascimento</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente : ${clientes}">
+            <td th:text="${cliente.id}"></td>
+            <td th:text="${cliente.nome}"></td>
+            <td th:text="${cliente.telefone}"></td>
+            <td th:text="${cliente.whatsapp}"></td>
+            <td th:text="${cliente.dataNascimento}"></td>
+            <td>
+                <a th:href="@{'/clientes/editar/' + ${cliente.id}}">Editar</a>
+                <a th:href="@{'/clientes/remover/' + ${cliente.id}}">Deletar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a th:href="@{/clientes(pagina=${paginaAtual - 1})}" class="prev"
+           th:classappend="${paginaAtual == 0 ? 'disabled' : ''}">&laquo;</a>
+        <span th:each="pagina : ${#numbers.sequence(0, quantidadePaginas - 1)}">
+                <a th:href="@{/clientes(pagina=${pagina})}" th:text="${pagina}"
+                   th:classappend="${pagina == paginaAtual ? 'active' : ''}"></a>
+            </span>
+        <a th:href="@{/clientes(pagina=${paginaAtual + 1})}" class="next"
+           th:classappend="${paginaAtual >= quantidadePaginas - 1 ? 'disabled' : ''}">&raquo;</a>
+    </div>
+</div>
 
 </body>
+
 </html>

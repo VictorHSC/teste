@@ -2,15 +2,13 @@ package avaliacao.frontend.controller;
 
 import avaliacao.frontend.dto.ClienteDTO;
 import avaliacao.frontend.dto.EnderecoDTO;
+import avaliacao.frontend.dto.PaginaDTO;
 import avaliacao.frontend.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/clientes")
@@ -35,12 +33,13 @@ public class ClienteController {
         return "redirect:/clientes/listar"; // Redireciona para a lista de clientes após salvar
     }
 
-    // Read
-    @GetMapping("/listar")
-    public String listarClientes(Model model) {
-        List<ClienteDTO> clientes = clienteService.listarTodos();
-        model.addAttribute("clientes", clientes);
-        return "cliente/listar_clientes";  // Referência ao arquivo Thymeleaf a ser renderizado
+    @GetMapping()
+    public String listarClientes(@RequestParam(defaultValue = "0") Integer pagina, Model model) {
+        PaginaDTO<ClienteDTO> clientesPage = clienteService.obterListagemClientes(pagina);
+        model.addAttribute("clientes", clientesPage.getContent());
+        model.addAttribute("paginaAtual", pagina);
+        model.addAttribute("quantidadePaginas", clientesPage.getTotalPages());
+        return "cliente/listar_clientes";
     }
 
     // Update
@@ -53,13 +52,8 @@ public class ClienteController {
 
     // Delete
     @GetMapping("/remover/{cliente_id}")
-    public String removerCliente(@PathVariable Long cliente_id, RedirectAttributes redirectAttributes) {
-        try {
-            clienteService.removerCliente(cliente_id);
-            redirectAttributes.addFlashAttribute("mensagem", "Cliente removido com sucesso!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erro", "Erro ao remover cliente!");
-        }
-        return "redirect:/clientes/listar";
+    public String removerCliente(@PathVariable Long cliente_id, @RequestHeader(value = "referer", required = false) final String referer) {
+        clienteService.removerCliente(cliente_id);
+        return "redirect:" + referer;
     }
 }
