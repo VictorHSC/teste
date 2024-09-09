@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/clientes")
@@ -46,9 +45,9 @@ public class ClienteController {
         return "cliente/listar_clientes";
     }
 
-    @GetMapping("/editar/{cliente_id}")
-    public String editarCliente(@PathVariable Long cliente_id, @RequestParam(required = false) Boolean sucesso, Model model) {
-        ClienteDTO clienteDTO = clienteService.buscarClientePorId(cliente_id);
+    @GetMapping("/editar/{clienteId}")
+    public String editarCliente(@PathVariable Long clienteId, @RequestParam(required = false) Boolean sucesso, Model model) {
+        ClienteDTO clienteDTO = clienteService.buscarClientePorId(clienteId);
         model.addAttribute("cliente", clienteDTO);
 
         if (sucesso == Boolean.TRUE) {
@@ -58,9 +57,9 @@ public class ClienteController {
         return "cliente/formulario_cliente";
     }
 
-    @GetMapping("/remover/{cliente_id}")
-    public String removerCliente(@PathVariable Long cliente_id, @RequestHeader(value = "referer", required = false) final String referer, Model model) {
-        clienteService.removerCliente(cliente_id);
+    @GetMapping("/remover/{clienteId}")
+    public String removerCliente(@PathVariable Long clienteId, @RequestHeader(value = "referer", required = false) final String referer, Model model) {
+        clienteService.removerCliente(clienteId);
         return "redirect:" + referer + "&removido=true";
     }
 }

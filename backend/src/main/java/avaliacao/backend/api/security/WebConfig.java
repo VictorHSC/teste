@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 public class WebConfig {
 
     @Value("${backend.api.key}")
-    private String API_KEY;
+    private String apiKey;
 
     @Bean
     public FilterRegistrationBean<ApiKeyFilter> apiKeyFilter() {
         FilterRegistrationBean<ApiKeyFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new ApiKeyFilter(API_KEY));
+        registrationBean.setFilter(new ApiKeyFilter(apiKey));
         registrationBean.addUrlPatterns("/*"); // Aplicar filtro para endpoints da API
         return registrationBean;
     }

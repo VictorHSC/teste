@@ -22,9 +22,9 @@ public class ClienteController {
         return new ResponseEntity<>(clienteService.adicionarAtualizarCliente(cliente), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{cliente_id}")
-    public ResponseEntity<Cliente> obterClientePorId(@PathVariable Long cliente_id) {
-        return new ResponseEntity<>(clienteService.obterClientePorId(cliente_id), HttpStatus.OK);
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<Cliente> obterClientePorId(@PathVariable Long clienteId) {
+        return new ResponseEntity<>(clienteService.obterClientePorId(clienteId), HttpStatus.OK);
     }
 
     @GetMapping("/listagem/{pagina}")
@@ -32,9 +32,9 @@ public class ClienteController {
         return new ResponseEntity<>(clienteService.obterListagemClientes(pagina), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{cliente_id}")
-    public ResponseEntity<Void> removerCliente(@PathVariable Long cliente_id) {
-        clienteService.removerCliente(cliente_id);
+    @DeleteMapping("/{clienteId}")
+    public ResponseEntity<Void> removerCliente(@PathVariable Long clienteId) {
+        clienteService.removerCliente(clienteId);
         return ResponseEntity.ok().build();
     }
 }

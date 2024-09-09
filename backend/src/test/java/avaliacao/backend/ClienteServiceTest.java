@@ -1,4 +1,4 @@
-package avaliacao.backend.unitario;
+package avaliacao.backend;
 
 import avaliacao.backend.api.repository.ClienteRepository;
 import avaliacao.backend.api.service.ClienteService;
@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-public class ClienteServiceTest {
+class ClienteServiceTest {
 
     @Spy
     @InjectMocks
@@ -98,7 +98,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void deveAdicionarAtualizarCliente() {
+    void deveAdicionarAtualizarCliente() {
         doReturn(clienteJoao).when(clienteRepository).save(any(Cliente.class));
 
         Cliente clienteSalvo = clienteService.adicionarAtualizarCliente(clienteJoao);
@@ -116,7 +116,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void deveObterClientePorId() {
+    void deveObterClientePorId() {
         when(clienteRepository.findById(any(Long.class))).thenReturn(Optional.of(clienteJoao));
 
         Cliente clienteObtido = clienteService.obterClientePorId(1L);
@@ -134,36 +134,38 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void deveObterListagemClientes() {
+    void deveObterListagemClientes() {
         doReturn(listagemClientes).when(clienteRepository).findAll(any(PageRequest.class));
 
-        Page<Cliente> listagemClientes = clienteService.obterListagemClientes(0);
+        Page<Cliente> clientes = clienteService.obterListagemClientes(0);
 
-        assertEquals(listagemClientes.getTotalElements(), 2);
-        assertEquals(listagemClientes.getTotalPages(), 1);
+        assertEquals(2, clientes.getTotalElements());
+        assertEquals(1, clientes.getTotalPages());
 
         // Asserts Joao
-        assertEquals(listagemClientes.getContent().get(0).getNome(), clienteJoao.getNome());
-        assertEquals(listagemClientes.getContent().get(0).getEnderecoDomiciliar(), enderecoA);
-        assertEquals(listagemClientes.getContent().get(0).getEnderecoCobranca(), enderecoB);
+        assertEquals(clientes.getContent().get(0).getNome(), clienteJoao.getNome());
+        assertEquals(clientes.getContent().get(0).getEnderecoDomiciliar(), enderecoA);
+        assertEquals(clientes.getContent().get(0).getEnderecoCobranca(), enderecoB);
 
         // Asserts Maria
-        assertEquals(listagemClientes.getContent().get(1).getNome(), clienteMaria.getNome());
-        assertEquals(listagemClientes.getContent().get(1).getEnderecoDomiciliar(), enderecoC);
-        assertEquals(listagemClientes.getContent().get(1).getEnderecoCobranca(), enderecoC);
+        assertEquals(clientes.getContent().get(1).getNome(), clienteMaria.getNome());
+        assertEquals(clientes.getContent().get(1).getEnderecoDomiciliar(), enderecoC);
+        assertEquals(clientes.getContent().get(1).getEnderecoCobranca(), enderecoC);
     }
 
     @Test
-    public void deveRemoverCliente() {
+    void deveRemoverCliente() {
         clienteService.removerCliente(1L);
+
+        assertEquals(1L, clienteJoao.getId());
     }
 
     @Test
-    public void deveLancarClienteNaoEncontradoException() {
+    void deveLancarClienteNaoEncontradoException() {
         Exception exception = assertThrows(ClienteNaoEncontadoException.class, () -> {
             clienteService.obterClientePorId(3L);
         });
 
-        assertEquals(exception.getMessage(), "Cliente não encontrado!");
+        assertEquals("Cliente não encontrado!", exception.getMessage());
     }
 }

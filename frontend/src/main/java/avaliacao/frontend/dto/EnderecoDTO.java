@@ -2,7 +2,6 @@ package avaliacao.frontend.dto;
 
 public class EnderecoDTO {
 
-    private Long id;
     private String cep;
     private String logradouro;
     private String numero;

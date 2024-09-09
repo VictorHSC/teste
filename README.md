@@ -108,3 +108,80 @@ Para executar a aplicação utilizando o **IntelliJ**, siga os seguintes passos:
 - Inicie as aplicações diretamente pela IDE, selecionando a opção de execução padrão.
 
 Além disso, é necessário ter um servidor **PostgreSQL** rodando localmente na porta 5432, para que o **backend** possa se conectar corretamente ao banco de dados.
+
+### Como executar os testes
+
+Para realizar os testes E2E (End-To-End) e de API, execute um dos seguintes comandos a partir da raiz do projeto:
+
+```
+robot robot/
+```
+
+ou
+
+```
+python3 -m robot robot/
+```
+
+Exemplo de execução:
+![Log de execução dos testes com Robot Framework](docs/teste_log_robot.png)
+
+Para executar os testes unitários do backend, utilize o comando de lifecycle test do Maven:
+
+```
+mvn test
+```
+
+Exemplo de execução:
+![Log de execução dos testes com Junit](docs/teste_log_junit.png)
+
+### Análise de Qualidade
+
+<details>
+<summary>Requisitos não funcionais implementados:</summary>
+
+| Requisito | Status |
+| -------- | ------- |
+| RQNF1 | Sim |
+| RQNF2 | Sim |
+| RQNF3 | Não |
+| RQNF4 | Sim |
+| RQNF5 | Sim |
+| RQNF6 | Sim |
+| RQNF7 | Sim |
+| RQNF8 | Sim |
+| RQNF9 | Sim |
+| RQNF10 | Sim |
+| RQNF11 | Não |
+
+81% implementado.
+</details>
+
+<details>
+<summary>Requisitos funcionais implementados:</summary>
+
+| Requisito | Status |
+| -------- | ------- |
+| RQF1 | Parcial* |
+| RQF2 | Sim |
+| RQF3 | Sim |
+| RQF4 | Sim |
+| RQF5 | Não |
+| RQF6 | Não |
+| RQF7 | Não |
+| RQF8 | Não |
+
+\* Para o RQF1 ficou faltando o controle de permissões.
+
+43% implementado.
+</details>
+
+Testes implementados:
+- Testes unitários: 5
+- Testes E2E: 5
+- Testes de API: 24
+
+O plugin Sonar Lint foi utilizado em ambas as aplicações e todos os apontamentos corrigidos, com excessão de um pontual do mackito.
+
+![Log do Sonar Backend](docs/sonar_backend.png)
+![Log do Sonar Frontend](docs/sonar_frontend.png)

@@ -36,17 +36,18 @@ Deve Inserir Cliente
     Close Browser
 
 Deve Obter Cliente Por ID
-    Open Browser    ${URL}/clientes/editar/22    ${BROWSER}
+    Open Browser    ${URL}/clientes/editar/8    ${BROWSER}
     ${cpf}=    Get Text    //input[@id='cpf']
     ${nome}=    Get Text    //input[@id='nome']
-    Should Be Equal    ${cpf}    222.444.666-78
-    Should Be Equal    ${nome}    Sérgio
+    Should Be Equal    ${cpf}    789.789.789-78
+    Should Be Equal    ${nome}    Juliana
     Close Browser
 
 Deve Obter Listagem Clientes
     Open Browser    ${URL}/clientes    ${BROWSER}
     Wait For Elements State    xpath=//*[contains(text(), 'Gestão de Clientes')]    visible
     ${itens}=    Get Element Count    //tr
+    ${itens}=    Convert To String    ${itens}
     Should Be Equal    ${itens}    11
     Close Browser
 

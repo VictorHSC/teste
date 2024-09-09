@@ -4,7 +4,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class ClienteDTO {
 

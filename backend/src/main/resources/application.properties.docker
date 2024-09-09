@@ -1,5 +1,8 @@
 spring.application.name=backend
 
+server.port=8081
+backend.api.key=8KxwLF0cAc
+
 spring.datasource.url=jdbc:postgresql://postgres:5432/mydb
 spring.datasource.username=user
 spring.datasource.password=password

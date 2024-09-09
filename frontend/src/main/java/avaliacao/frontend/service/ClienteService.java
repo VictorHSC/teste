@@ -16,76 +16,59 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ClienteService {
 
+    private static final String X_API_KEY = "X-API-KEY";
+
     @Autowired
     private RestTemplate restTemplate;
 
     @Value("${backend.api.url}")
-    private String API_BASE_URL;
+    private String apiBaseUrl;
 
     @Value("${backend.api.key}")
-    private String API_KEY;
+    private String apiKey;
 
     public ClienteDTO salvarCliente(ClienteDTO clienteDTO) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-API-KEY", API_KEY);
+        headers.set(X_API_KEY, apiKey);
         headers.set("Content-Type", "application/json");
 
         HttpEntity<ClienteDTO> entity = new HttpEntity<>(clienteDTO, headers);
 
-        ResponseEntity<ClienteDTO> response = restTemplate.exchange(
-                API_BASE_URL,
-                HttpMethod.PUT,
-                entity,
-                ClienteDTO.class
-        );
+        ResponseEntity<ClienteDTO> response = restTemplate.exchange(apiBaseUrl, HttpMethod.PUT, entity, ClienteDTO.class);
 
         return response.getBody();
     }
 
-    public ClienteDTO buscarClientePorId(Long cliente_id) {
+    public ClienteDTO buscarClientePorId(Long clienteId) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-API-KEY", API_KEY);
+        headers.set(X_API_KEY, apiKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<ClienteDTO> response = restTemplate.exchange(
-                API_BASE_URL + "/" + cliente_id,
-                HttpMethod.GET,
-                entity,
-                ClienteDTO.class
-        );
+        ResponseEntity<ClienteDTO> response = restTemplate.exchange(apiBaseUrl + "/" + clienteId, HttpMethod.GET, entity, ClienteDTO.class);
 
         return response.getBody();
     }
 
     public PaginaDTO<ClienteDTO> obterListagemClientes(Integer pagina) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-API-KEY", API_KEY);
+        headers.set(X_API_KEY, apiKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<PaginaDTO<ClienteDTO>> response = restTemplate.exchange(
-                API_BASE_URL + "/listagem/" + pagina,
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<>() {}
-        );
+        ResponseEntity<PaginaDTO<ClienteDTO>> response = restTemplate.exchange(apiBaseUrl + "/listagem/" + pagina, HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
+        });
 
         return response.getBody();
     }
 
-    public Integer removerCliente(Long cliente_id) {
+    public Integer removerCliente(Long clienteId) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-API-KEY", API_KEY);
+        headers.set(X_API_KEY, apiKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<Void> response = restTemplate.exchange(
-                API_BASE_URL + "/" + cliente_id,
-                HttpMethod.DELETE,
-                entity,
-                Void.class
-        );
+        ResponseEntity<Void> response = restTemplate.exchange(apiBaseUrl + "/" + clienteId, HttpMethod.DELETE, entity, Void.class);
 
         return response.getStatusCode().value();
     }
